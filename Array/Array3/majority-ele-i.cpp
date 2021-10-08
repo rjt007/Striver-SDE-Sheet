@@ -58,7 +58,7 @@ int main()
     {
         cin >> v[i];
     }
-    int maxprofit = majorityElement(v);
-    cout << "Maxprofit is: " << maxprofit << endl;
+    int majorityelement = majorityElement(v);
+    cout << "Majority Element is: " << majorityelement << endl;
     return 0;
 }
