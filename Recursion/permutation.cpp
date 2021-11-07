@@ -3,7 +3,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Method: Recursion + Backtraking
+//Method1: Using Recursion + Freq Array
+//T.C->O(N! * N) && S.C->O(2*N),Auxilary S.C->O(N)
+void solve(vector<int> &v, vector<int> &temp, vector<int> &freq, vector<vector<int>> &ans)
+{
+    if (temp.size() == v.size())
+    {
+        ans.push_back(temp);
+        return;
+    }
+    for (int i = 0; i < v.size(); i++)
+    {
+        if (!freq[i])
+        {
+            temp.push_back(v[i]);
+            freq[i] = 1;
+            solve(v, temp, freq, ans);
+            temp.pop_back();
+            freq[i] = 0;
+        }
+    }
+}
+vector<vector<int>> permute(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> temp;
+    vector<int> freq(n, 0);
+    vector<vector<int>> ans;
+    solve(nums, temp, freq, ans);
+    return ans;
+}
+
+//Method2: Recursion + Backtraking
 //T.C->O(N!)  && S.C->O(1), Auxilary S.C->O(N)
 void solve(int idx, vector<int> &v, vector<vector<int>> &ans)
 {
