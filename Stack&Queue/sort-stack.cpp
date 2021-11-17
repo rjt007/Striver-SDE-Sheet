@@ -1,45 +1,53 @@
+//Sort A Stack
 #include <bits/stdc++.h>
 using namespace std;
 
+
+/* //Method1: Recursion
+//T.C->O(N^2) && S.C->O(1), Auxilary Space->O(1)
+
+void insert(stack<int>&st, int ele)
+{
+    if(st.empty() || st.top()>=ele)
+    {
+        st.push(ele);
+        return;
+    }
+    int temp = st.top();
+    st.pop();
+    insert(st,ele);
+    st.push(temp);
+}
+
 void sortstack(stack<int>&st)
+{
+    if(st.size()==1)
+    {
+        return;
+    }
+    int ele = st.top();
+    st.pop();
+    sortstack(st);
+    insert(st, ele);
+} */
+
+//Method2: Using another stack
+//T.C->O(N^2) & S.C->O(N)
+stack<int>sortstack(stack<int> st)
 {
     stack<int>temp;
     while (!st.empty())
     {
-        if(temp.empty()){
-            temp.push(st.top());
-            st.pop();
-        } 
-        else
+        int ele = st.top();
+        st.pop();
+        while (!temp.empty() && temp.top()<=ele)
         {
-            int ele = st.top(); st.pop();
-            if(ele<=temp.top())
-            {
-                temp.push(ele);
-            }
-            else
-            {
-                while (!temp.empty())
-                {
-                    if(ele>temp.top())
-                    {
-                        st.push(temp.top());
-                        temp.pop();
-                    }
-                    else
-                    {
-                        temp.push(ele);
-                        break;
-                    }
-                }
-            }
+            st.push(temp.top());
+            temp.pop();
         }
+        temp.push(ele);
     }
-    while (!temp.empty())
-    {
-        st.push(temp.top());
-        temp.pop();
-    }
+    return temp;
 }
 
 int main()
@@ -53,11 +61,11 @@ int main()
         cin>>val;
         st.push(val);
     }
-    sortstack(st);
-    while (!st.empty())
+    stack<int>ans = sortstack(st);
+    while (!ans.empty())
     {
-        cout<<st.top()<<" ";
-        st.pop();
+        cout<<ans.top()<<" ";
+        ans.pop();
     }
     return 0;
 }
