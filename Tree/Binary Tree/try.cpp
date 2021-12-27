@@ -43,54 +43,47 @@ node* bfsinsertion(node* root, int data)
     return root;
 }
 
-void bfstraversal(node* root)
+vector<vector<int>> bfstraversal(node* root)
 {
-    if(root==NULL) return;
+    vector<vector<int>>ans;
+    if(root==NULL) return ans;
     queue<node*>q;
     q.push(root);
+    q.push(NULL);
+    vector<int>preans;
+    int flag = 0;
     while (!q.empty())
     {
         node* temp = q.front();
         q.pop();
-        if(temp!=NULL) cout<<temp->val<<" ";
-        if(temp->left!=NULL) q.push(temp->left);
-        if(temp->right!=NULL) q.push(temp->right);
-    }
-}
-
-void inordertraversal(node* root)
-{
-    if(root==NULL) return;
-    node* temp = root;
-    while (temp!=NULL)
-    {
-        if(temp->left==NULL)
-        {
-            cout<<temp->val<<" ";
-            temp = temp->right;
+        if(temp!=NULL){
+            preans.push_back(temp->val);
+            if(temp->left!=NULL) q.push(temp->left);
+            if(temp->right!=NULL) q.push(temp->right);
         }
-        else
-        {
-            node* temp2 = temp->left;
-            while (temp2->right!=NULL && temp2->right!=temp)
-            {
-                temp2 = temp2->right;
+        else if(!q.empty()){
+            if(flag==0){
+                ans.push_back(preans);
+                flag = 1;
+            } 
+            else if(flag==1){
+                reverse(preans.begin(),preans.end());
+                ans.push_back(preans);
+                flag = 0;
             }
-            if(temp2->right==NULL)
-            {
-                temp2->right = temp;
-                temp = temp->left;
-            }
-            else if(temp2->right==temp)
-            {
-                temp2->right = NULL;
-                cout<<temp->val<<" ";
-                temp = temp->right;
-            }
+            preans.clear();
+            q.push(NULL);
         }
     }
+    if(flag==0){
+        ans.push_back(preans);
+    }
+    else{
+        reverse(preans.begin(), preans.end());
+        ans.push_back(preans);
+    }
+    return ans;
 }
-
 int main()
 {
     int n;
@@ -102,6 +95,12 @@ int main()
         cin>>data;
         root = bfsinsertion(root,data);
     }
-    //bfstraversal(root);
-    inordertraversal(root);
+    vector<vector<int>>ans = bfstraversal(root);
+    for(auto x:ans){
+        for (int i = 0; i < x.size(); i++)
+        {
+            cout<<x[i]<<" ";
+        }
+        cout<<endl;
+    }
 }
