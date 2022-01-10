@@ -1,5 +1,5 @@
-//Path to Given Node
-//https://www.interviewbit.com/problems/path-to-given-node/
+//Lowest Common Ancestor of a Binary Tree
+//https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -42,14 +42,14 @@ node *bfsinsertion(node *root, int data)
     }
     return root;
 }
-//Method: Using preorder traversal
-//T.C->O(N) & S.C->O(N) 
-bool preorder(node *root, int n, vector<int> &ans)
+//Method1: Using Root to Node path logic
+//T.C->O(2*N) & S.C->O(2*N)
+bool preorder(node *root, node *n, vector<node *> &ans)
 {
     if (root == NULL)
         return false;
-    ans.push_back(root->val);
-    if (root->val == n)
+    ans.push_back(root);
+    if (root == n)
     {
         return true;
     }
@@ -58,13 +58,45 @@ bool preorder(node *root, int n, vector<int> &ans)
     ans.pop_back();
     return false;
 }
-
-vector<int> solve(node *root, int n)
+node *lowestCommonAncestor(node *root, node *p, node *q)
 {
-    vector<int> ans;
-    preorder(root, n, ans);
+    vector<node *> pv;
+    vector<node *> qv;
+    node *ans;
+    preorder(root, p, pv);
+    preorder(root, q, qv);
+    int n = min(pv.size(), qv.size());
+    for (int i = 0; i < n; i++)
+    {
+        if (pv[i] == qv[i])
+        {
+            ans = pv[i];
+        }
+    }
     return ans;
 }
+
+//Method2: Using DFS traversal
+//T.C->O(N) && S.C->O(N)
+node *lowestCommonAncestor(node *root, node *p, node *q)
+{
+    if (root == NULL || root == p || root == q)
+    {
+        return root;
+    }
+    node *leftnode = lowestCommonAncestor(root->left, p, q);
+    node *rightnode = lowestCommonAncestor(root->right, p, q);
+
+    if (leftnode == NULL)
+        return rightnode;
+    else if (rightnode == NULL)
+        return leftnode;
+    else
+    {
+        return root;
+    }
+}
+
 int main()
 {
     int n;
@@ -76,12 +108,4 @@ int main()
         cin >> data;
         root = bfsinsertion(root, data);
     }
-    int d;
-    cin>>d;
-    vector<int> ans = solve(root,d);
-    for (int x : ans)
-    {
-        cout << x << " ";
-    }
-    return 0;
 }
