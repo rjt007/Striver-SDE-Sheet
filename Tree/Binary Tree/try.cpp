@@ -1,7 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-struct node{
+struct node
+{
     int val;
     node* left, *right;
     node(int data){
@@ -17,8 +18,7 @@ node* bfsinsertion(node* root, int data){
     }
     queue<node*>q;
     q.push(root);
-    while (!q.empty())
-    {
+    while(!q.empty()){
         node* temp = q.front();
         q.pop();
         if(temp->left==NULL){
@@ -48,13 +48,11 @@ void bfstraversal(node* root){
         if(temp->right!=NULL) q.push(temp->right);
     }
 }
-
-int main()
-{
+int main(){
     int n;
     cin>>n;
-    node* root = NULL;
     int data;
+    node* root = NULL;
     while (n--)
     {
         cin>>data;
